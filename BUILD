@@ -70,6 +70,11 @@ config_setting(
     values = {"apple_platform_type": "ios"},
 )
 
+config_setting(
+    name = "systemd",
+    values = {"define": "use_systemd=true"},
+)
+
 selects.config_setting_group(
     name = "grpc_no_xds",
     match_any = [
@@ -3241,6 +3246,7 @@ grpc_cc_library(
         "src/core/lib/iomgr/socket_utils_linux.cc",
         "src/core/lib/iomgr/socket_utils_posix.cc",
         "src/core/lib/iomgr/socket_windows.cc",
+        "src/core/lib/iomgr/systemd_utils.cc",
         "src/core/lib/iomgr/tcp_client.cc",
         "src/core/lib/iomgr/tcp_client_cfstream.cc",
         "src/core/lib/iomgr/tcp_client_posix.cc",
@@ -3346,6 +3352,7 @@ grpc_cc_library(
         "src/core/lib/iomgr/socket_mutator.h",
         "src/core/lib/iomgr/socket_utils_posix.h",
         "src/core/lib/iomgr/socket_windows.h",
+        "src/core/lib/iomgr/systemd_utils.h",
         "src/core/lib/iomgr/tcp_client.h",
         "src/core/lib/iomgr/tcp_client_posix.h",
         "src/core/lib/iomgr/tcp_posix.h",
@@ -3484,6 +3491,14 @@ grpc_cc_library(
         "useful",
         "work_serializer",
     ],
+    defines = select({
+        "systemd": ["HAVE_LIBSYSTEMD"],
+        "//conditions:default": [],
+    }),
+    linkopts = select({
+        "systemd": ["-lsystemd"],
+        "//conditions:default": [],
+    }),
 )
 
 grpc_cc_library(

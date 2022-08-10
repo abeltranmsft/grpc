@@ -132,6 +132,7 @@ def grpc_cc_library(
         alwayslink = 0,
         data = [],
         tags = [],
+        linkopts = [],
         linkstatic = False):
     """An internal wrapper around cc_library.
 
@@ -157,7 +158,7 @@ def grpc_cc_library(
     copts = []
     if language.upper() == "C":
         copts = copts + if_not_windows(["-std=c11"])
-    linkopts = if_not_windows(["-pthread"]) + if_windows(["-defaultlib:ws2_32.lib"])
+    linkopts = linkopts + if_not_windows(["-pthread"]) + if_windows(["-defaultlib:ws2_32.lib"])
     if select_deps:
         for select_deps_entry in select_deps:
             deps += select(select_deps_entry)
