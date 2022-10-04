@@ -18,6 +18,10 @@
 
 #include <grpc/support/port_platform.h>
 
+#include "src/core/lib/iomgr/port.h"
+
+#ifdef GRPC_POSIX_SOCKET_TCP_SERVER_UTILS_COMMON
+
 #ifdef HAVE_LIBSYSTEMD
 #include <systemd/sd-daemon.h>
 #endif
@@ -107,3 +111,5 @@ void set_matching_sd_fds(GRPC_UNUSED grpc_tcp_server* s,
                          GRPC_UNUSED const grpc_resolved_address* addr,
                          GRPC_UNUSED int requested_port) {}
 #endif /* HAVE_LIBSYSTEMD */
+
+#endif /* GRPC_POSIX_SOCKET_TCP_SERVER_UTILS_COMMON */
